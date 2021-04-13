@@ -5,10 +5,12 @@ const NEW_CHAT_MESSAGE_EVENT = 'newChatMessage'; // Name of the event
 const SOCKET_SERVER_URL = 'http://localhost:4000';
 
 const useChat = (roomId) => {
+  console.log('in usechat');
   const [messages, setMessages] = useState([]); // Sent and received messages
   const socketRef = useRef();
 
   useEffect(() => {
+    console.log('use effect callback');
     // Creates a WebSocket connection
     socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
       query: { roomId }
@@ -26,6 +28,7 @@ const useChat = (roomId) => {
     // Destroys the socket reference
     // when the connection is closed
     return () => {
+      console.log(messages);
       socketRef.current.disconnect();
     };
   }, [roomId]);
@@ -33,6 +36,7 @@ const useChat = (roomId) => {
   // Sends a message to the server that
   // forwards it to all users in the same room
   const sendMessage = (messageBody) => {
+    console.log('send message method');
     socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
       body: messageBody,
       senderId: socketRef.current.id
